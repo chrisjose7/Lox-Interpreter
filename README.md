@@ -1,51 +1,75 @@
 # Lox Interpreter (Python)
 
-This project is a Python implementation of the Lox programming language,
-based on the book *Crafting Interpreters* by Robert Nystrom.
+A Python implementation of the Lox programming language from Robert Nystrom's
+*Crafting Interpreters*. This is the **tree-walk interpreter** (jlox): source is
+scanned into tokens, parsed into an AST by a recursive-descent parser, and
+executed by walking the tree with an environment-based scope model.
 
-The interpreter is built using a tree-walk architecture, including a scanner,
-parser, and runtime environment.
+A separate bytecode-VM implementation (the clox half) lives in
+[cpsc323-project2-lox-vm](https://github.com/chrisjose7/cpsc323-project2-lox-vm).
 
 ## Features
-- Expression evaluation with correct operator precedence
-- Variables with block scoping
-- Control flow (if statements and while loops)
-- Functions with parameters and return values
-- Recursion and closures
 
-## Running the Interpreter
+- Expression evaluation with correct operator precedence and associativity
+- Variables and assignment with lexical block scoping
+- Control flow: `if`/`else`, `while`, and `for`
+- Functions with parameters, return values, and recursion
+- Closures (functions capture their defining environment)
+
+## Running
 
 Run a file:
-
-```
 python lox.py yourfile.lox
-```
 
-
-Or start interactive mode:
-
-```
+Start the REPL (interactive mode):
 python lox.py
-```
 
-## Example
+## Examples
 
-```
-fun add(a, b) {
-  return a + b;
+Recursion:
+fun fib(n) {
+if (n < 2) return n;
+return fib(n - 1) + fib(n - 2);
 }
+print fib(10); // 55
 
-print add(2, 3); // 5
-```
+Closures (each counter keeps its own captured state):
+fun makeCounter() {
+var count = 0;
+fun increment() {
+count = count + 1;
+return count;
+}
+return increment;
+}
+var counter = makeCounter();
+print counter(); // 1
+print counter(); // 2
 
-## Implementation Details
+## How it works
 
-- Recursive descent parser
-- Abstract syntax tree (AST) representation
-- Environment chaining for scope resolution
-- Function calls with closure support
+| Stage        | Responsibility                                              | File(s) |
+|--------------|-------------------------------------------------------------|---------|
+| Scanner      | Source text → tokens                                        | `scanner.py` |
+| Parser       | Tokens → AST (recursive descent)                            | `parser.py`, `expr.py`, `stmt.py` |
+| Interpreter  | Tree-walk evaluation                                        | `interpreter.py` |
+| Environment  | Variable storage and scope chaining                        | `environment.py` |
+| Functions    | Callable objects, closures, `return` via control-flow exception | `lox_function.py`, `lox_callable.py`, `return_exception.py` |
+
+Scope is resolved by chaining `Environment` objects: each block/function creates
+a child environment that falls back to its enclosing scope, which is what makes
+closures work. `return` is implemented by raising a dedicated exception that
+unwinds the call stack back to the function boundary.
+
+## Known limitations
+
+- No static resolution pass, so some closure edge cases from later chapters of
+  the book are not handled.
+- No classes/inheritance (implemented through the functions chapter, not the OOP chapters).
+- Tree-walk execution is intentionally simple over fast; the bytecode VM repo is the performance-oriented counterpart.
 
 ## Acknowledgements
 
-Based on *Crafting Interpreters* by Robert Nystrom.  
-ChatGPT was used to help translate and understand parts of the implementation.
+Implementation based on *Crafting Interpreters* by Robert Nystrom. I used
+ChatGPT as a learning aid to understand parts of the book's design while
+implementing it in Python.
