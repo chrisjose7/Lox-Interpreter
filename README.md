@@ -59,8 +59,8 @@ print counter(); // 2
 
 | Stage        | Responsibility                                              | File(s) |
 |--------------|-------------------------------------------------------------|---------|
-| Scanner      | Source text → tokens                                        | `scanner.py` |
-| Parser       | Tokens → AST (recursive descent)                            | `parser.py`, `expr.py`, `stmt.py` |
+| Scanner      | Source text -> tokens                                       | `scanner.py` |
+| Parser       | Tokens -> AST (recursive descent)                           | `parser.py`, `expr.py`, `stmt.py` |
 | Interpreter  | Tree-walk evaluation                                        | `interpreter.py` |
 | Environment  | Variable storage and scope chaining                        | `environment.py` |
 | Functions    | Callable objects, closures, `return` via control-flow exception | `lox_function.py`, `lox_callable.py`, `return_exception.py` |
