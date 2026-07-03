@@ -19,32 +19,41 @@ A separate bytecode-VM implementation (the clox half) lives in
 ## Running
 
 Run a file:
+```bash
 python lox.py yourfile.lox
+```
 
 Start the REPL (interactive mode):
+```bash
 python lox.py
+```
 
 ## Examples
 
 Recursion:
+```lox
 fun fib(n) {
-if (n < 2) return n;
-return fib(n - 1) + fib(n - 2);
+  if (n < 2) return n;
+  return fib(n - 1) + fib(n - 2);
 }
 print fib(10); // 55
+```
 
 Closures (each counter keeps its own captured state):
+```lox
 fun makeCounter() {
-var count = 0;
-fun increment() {
-count = count + 1;
-return count;
+  var count = 0;
+  fun increment() {
+    count = count + 1;
+    return count;
+  }
+  return increment;
 }
-return increment;
-}
+
 var counter = makeCounter();
 print counter(); // 1
 print counter(); // 2
+```
 
 ## How it works
 
