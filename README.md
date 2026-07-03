@@ -6,7 +6,7 @@ scanned into tokens, parsed into an AST by a recursive-descent parser, and
 executed by walking the tree with an environment-based scope model.
 
 A separate bytecode-VM implementation (the clox half) lives in
-[cpsc323-project2-lox-vm](https://github.com/chrisjose7/cpsc323-project2-lox-vm).
+[lox-bytecode-VM](https://github.com/chrisjose7/lox-bytecode-VM).
 
 ## Features
 
